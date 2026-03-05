@@ -28,9 +28,16 @@ class SessionsController extends Controller
             'password' => ['required', Password::default()]
         ]);
 
-        Auth::attempt($validated);
+        if(!Auth::attempt($validated))
+        {
+            return back()
+                ->withErrors(['password' => 'We were unable to authenticate you with the credentials provided.'])
+                ->withInput();
+        }
 
-        return redirect('/ideas');
+        $request->session()->regenerate();
+
+        return redirect()->intended('/')->with('success', 'You are now logged in.');
     }
 
     public function destroy()

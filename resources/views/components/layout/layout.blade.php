@@ -6,13 +6,23 @@
 
         <title>Idea</title>
 
-        @vite(['resources/css/app.css'])
+        @vite(['resources/css/app.css', 'resources/js/app.js'])
     </head>
     <body class="bg-background text-foreground">
         <x-layout.nav />
 
-        <main class="max-w-7x1 mx-auto px-6">
+        <main class="max-w-7xl mx-auto px-6">
             {{ $slot }}
         </main>
+
+        @session('success')
+            <div x-data="{ show : true }"
+                x-init="setTimeout(() => show = false, 3000)"
+                x-show="show"
+                x-transition.opacity.duration.300ms
+                class="bg-primary px-4 py-3 fixed bottom-4 right-4 rounded-lg">
+                {{ $value }}
+            </div>
+        @endsession
     </body>
 </html>
