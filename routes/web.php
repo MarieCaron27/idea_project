@@ -14,6 +14,9 @@ Route::get('/ideas', [IdeaController::class, 'index'])->name('idea.index')->midd
 // Get one idea
 Route::get('/ideas/{idea}', [IdeaController::class, 'show'])->name('idea.show')->middleware('auth');
 
+// Delete one idea
+Route::delete('/ideas/{idea}', [IdeaController::class, 'destroy'])->name('idea.destroy')->middleware('auth');
+
 // Create User
 Route::get('/auth/register', [RegisteredUserController::class, 'create'])->middleware('guest');
 
