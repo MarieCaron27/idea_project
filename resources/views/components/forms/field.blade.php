@@ -16,7 +16,8 @@
             name="{{ $name }}"
             class="textarea"
             {{ $attributes }}
-        >{{ old($name) }}</textarea>    @else
+        >{{ old($name) }}</textarea>    
+    @else
         <input 
             value="{{ old($name) }}" 
             type="{{ $type }}" 
