@@ -55,7 +55,50 @@
 
         <div>
             <x-modal name="create-idea-modal" title="New Idea">
-                <p>Slot content here.</p>
+                <form x-data="{status: 'pending'}" method="post" action="{{ route('idea.store') }}">
+                    @csrf
+
+                    <div class="space-y-6">
+                        <x-forms.field 
+                            label="Title" 
+                            name="title" 
+                            placeholder="Enter a title for your idea"
+                            autofocus
+                        />
+                        
+                        <div class="space-y-2">
+                            <label for="status" class="label">Status</label>
+
+                            <div class="flex gap-x-3">
+                                @foreach (App\IdeaStatus::cases() as $status)
+                                    <button 
+                                        type="button"
+                                        @click="status = @js($status->value)"
+                                        class="btn flex-1 h-10"
+                                        :class="status !== @js($status->value) ? 'btn-outlined' : ''"
+                                    >
+                                        {{ $status->label() }}
+                                    </button>
+                                @endforeach
+                                <input type="hidden" name="status" :value="status" />
+                            </div>
+                        </div>
+
+                        <x-forms.error name="status"/>
+
+                        <x-forms.field 
+                            label="Description" 
+                            name="description" 
+                            type="textarea"
+                            placeholder="Describe your idea..."
+                        />
+
+                        <div class="flex justify-end gap-x-5">
+                            <button type="submit" class="btn">Create</button>
+                            <button type="button" @click="$dispatch('close-modal')">Cancel</button>
+                        </div>
+                    </div>
+                </form>
             </x-modal>
         </div>
     </div>

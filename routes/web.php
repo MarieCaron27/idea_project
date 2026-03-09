@@ -11,6 +11,9 @@ Route::redirect('/', '/ideas');
 // Get all ideas
 Route::get('/ideas', [IdeaController::class, 'index'])->name('idea.index')->middleware('auth');
 
+// Add an idea
+Route::post('/ideas', [IdeaController::class, 'store'])->name('idea.store')->middleware('auth');
+
 // Get one idea
 Route::get('/ideas/{idea}', [IdeaController::class, 'show'])->name('idea.show')->middleware('auth');
 
