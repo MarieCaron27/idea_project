@@ -6,6 +6,7 @@ namespace App\Models;
 
 use App\IdeaStatus;
 use Database\Factories\IdeaFactory;
+use Illuminate\Database\Eloquent\Casts\AsArrayObject;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -18,7 +19,7 @@ class Idea extends Model
     use HasFactory;
 
     protected $casts = [
-        'links' => 'array',
+        'links' => AsArrayObject::class,
         'status' => IdeaStatus::class,
     ];
 

@@ -107,7 +107,18 @@
 
                                 <!-- We use JS not PHP here -->
                                 <template x-for="(link, index) in links" :key="index">
-                                    <input name="links[]" x-model="links[index]" class="input">
+                                    <div class="flex gap-x-2 items-center">
+                                        <input name="links[]" x-model="links[index]" class="input">
+
+                                        <button 
+                                            type="button" 
+                                            aria-label="Remove link button"
+                                            @click="links.splice(index, 1)"
+                                            class="form-muted-icon"
+                                        >
+                                            <x-icons.close />
+                                        </button>
+                                    </div>
                                 </template>
 
                                 <div class="flex gap-x-2 items-center">
@@ -131,6 +142,7 @@
                                         "
                                         :disabled="newLink.trim().length === 0"
                                         aria-label="Add link button"
+                                        class="form-muted-icon"
                                     >
                                         <x-icons.close class="rotate-45"/>
                                     </button>
