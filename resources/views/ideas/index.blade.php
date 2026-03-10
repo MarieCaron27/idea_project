@@ -8,6 +8,7 @@
                 x-data
                 @click="$dispatch('open-modal', 'create-idea-modal')"
                 is="button"
+                data-test="create-idea-button"
                 class="mt-10 cursor-pointer h-32 w-full text-left"
             >
                 <p>What's the idea ?</p>
@@ -55,8 +56,14 @@
 
         <div>
             <x-modal name="create-idea-modal" title="New Idea">
-                <form x-data="{status: 'pending'}" method="post" action="{{ route('idea.store') }}">
-                    @csrf
+                <form x-data="{
+                            status: 'pending',
+                            newLink: '',
+                            links: []
+                        }" 
+                        method="post" 
+                        action="{{ route('idea.store') }}"
+                >                    @csrf
 
                     <div class="space-y-6">
                         <x-forms.field 
@@ -74,6 +81,7 @@
                                     <button 
                                         type="button"
                                         @click="status = @js($status->value)"
+                                        data-test="button-status-{{ $status->value }}"
                                         class="btn flex-1 h-10"
                                         :class="status !== @js($status->value) ? 'btn-outlined' : ''"
                                     >
@@ -92,6 +100,43 @@
                             type="textarea"
                             placeholder="Describe your idea..."
                         />
+
+                        <div>
+                            <fieldset class="space-y-3">
+                                <legend class="label">Links</legend>
+
+                                <!-- We use JS not PHP here -->
+                                <template x-for="(link, index) in links" :key="index">
+                                    <input name="links[]" x-model="links[index]" class="input">
+                                </template>
+
+                                <div class="flex gap-x-2 items-center">
+                                    <input 
+                                        x-model="newLink"
+                                        type="url"
+                                        id="new-link"
+                                        placeholder="https://example.com"
+                                        autocomplete="url"
+                                        class="input flex-1"
+                                        spellcheck="false"
+                                    >
+
+                                    <button 
+                                        type="button" 
+                                        @click="
+                                            if (newLink.trim()) {
+                                                links.push(newLink.trim());
+                                                newLink = '';
+                                            }
+                                        "
+                                        :disabled="newLink.trim().length === 0"
+                                        aria-label="Add link button"
+                                    >
+                                        <x-icons.close class="rotate-45"/>
+                                    </button>
+                                </div>
+                            </fieldset>
+                        </div>
 
                         <div class="flex justify-end gap-x-5">
                             <button type="submit" class="btn">Create</button>

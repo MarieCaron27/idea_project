@@ -19,7 +19,7 @@ class IdeaController extends Controller
     public function index(Request $request)
     {
         $user = Auth::user();
-        
+
         $ideas = $user
             ->ideas()
             ->when(in_array($request->status, IdeaStatus::values()), fn ($query) => $query->where('status', $request->status))
@@ -57,7 +57,7 @@ class IdeaController extends Controller
     public function show(Idea $idea)
     {
         return view('ideas.show', [
-            'idea' => $idea
+            'idea' => $idea,
         ]);
     }
 
@@ -82,7 +82,7 @@ class IdeaController extends Controller
      */
     public function destroy(Idea $idea)
     {
-        //Make sure you're authorized but it will be in another episode
+        // Make sure you're authorized but it will be in another episode
         $idea->delete();
 
         return to_route('idea.index');
