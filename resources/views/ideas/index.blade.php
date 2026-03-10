@@ -56,14 +56,12 @@
 
         <div>
             <x-modal name="create-idea-modal" title="New Idea">
-                <form x-data="{
-                            status: 'pending',
-                            newLink: '',
-                            links: []
-                        }" 
-                        method="post" 
-                        action="{{ route('idea.store') }}"
-                >                    @csrf
+                <form x-data="{ status: 'pending', newLink: '', links: [] }"
+                    method="post"
+                    action="{{ route('idea.store') }}"
+                    @submit="links = links.map(l => l.trim()).filter(l => l.length > 0)"
+                >                
+                    @csrf
 
                     <div class="space-y-6">
                         <x-forms.field 
@@ -108,16 +106,17 @@
                                 <!-- We use JS not PHP here -->
                                 <template x-for="(link, index) in links" :key="index">
                                     <div class="flex gap-x-2 items-center">
-                                        <input name="links[]" x-model="links[index]" class="input">
-
-                                        <button 
-                                            type="button" 
-                                            aria-label="Remove link button"
-                                            @click="links.splice(index, 1)"
-                                            class="form-muted-icon"
+                                        <input 
+                                            type="url"
+                                            name="links[]" 
+                                            x-model="links[index]" 
+                                            :value="link"
+                                            class="input"
                                         >
+
+                                        <button type="button" @click="links.splice(index, 1)" class="form-muted-icon" aria-label="Remove link">
                                             <x-icons.close />
-                                        </button>
+                                        </button>                                    
                                     </div>
                                 </template>
 
