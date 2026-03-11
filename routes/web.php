@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\IdeaController;
+use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RegisteredUserController;
 use App\Http\Controllers\SessionsController;
 use App\Http\Controllers\StepController;
@@ -44,6 +45,10 @@ Route::get('/auth/login', [SessionsController::class, 'create'])->name('login')-
 
 // Store User's session
 Route::post('/auth/login', [SessionsController::class, 'store'])->middleware('guest');
+
+//Edit User's profile
+Route::get('profile', [ProfileController::class, 'edit'])->name('profile.edit')->middleware('auth');
+Route::patch('profile', [ProfileController::class, 'update'])->name('profile.update')->middleware('auth');
 
 // Delete User's session
 Route::post('/logout', [SessionsController::class, 'destroy'])->middleware('auth');
