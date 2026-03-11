@@ -3,6 +3,7 @@
 use App\Http\Controllers\IdeaController;
 use App\Http\Controllers\RegisteredUserController;
 use App\Http\Controllers\SessionsController;
+use App\Http\Controllers\StepController;
 use Illuminate\Support\Facades\Route;
 
 // Route::get('/', fn () => view('welcome'));
@@ -19,6 +20,9 @@ Route::get('/ideas/{idea}', [IdeaController::class, 'show'])->name('idea.show')-
 
 // Delete one idea
 Route::delete('/ideas/{idea}', [IdeaController::class, 'destroy'])->name('idea.destroy')->middleware('auth');
+
+// Update a step
+Route::patch('/steps/{step}', [StepController::class, 'update'])->name('step.update')->middleware('auth');
 
 // Create User
 Route::get('/auth/register', [RegisteredUserController::class, 'create'])->middleware('guest');

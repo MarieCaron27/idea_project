@@ -34,6 +34,13 @@
           <div class="grid md:grid-cols-2 gap-6">
                 @forelse ($ideas as $idea)
                 <x-cards href="{{ route('idea.show', $idea) }}">
+
+                    @if ($idea->image_path)
+                        <div class="mb-4 mx-4 -mt-4 rounded-t-lg overflow-hidden">
+                            <img src="{{ asset('storage/' . $idea->image_path) }}" alt="" class="w-full h-auto object-cover"/>
+                        </div>
+                    @endif
+
                     <h3 class="text-foreground text-lg"> {{ $idea->title }} </h3>
 
                     <div class="mt-1">
@@ -59,6 +66,7 @@
                 <form x-data="{ status: 'pending', newLink: '', links: [], newStep: '', steps: [] }"
                     method="post"
                     action="{{ route('idea.store') }}"
+                    enctype="multipart/form-data"
                     @submit="links = links.map(l => l.trim()).filter(l => l.length > 0)"
                 >                
                     @csrf
@@ -99,6 +107,11 @@
                             placeholder="Describe your idea..."
                         />
 
+                        <div class="space-y-2">
+                            <label for="image" class="label">Image</label>
+                            <input type="file" name="image" id="image" accept="image/*" class="input">
+                            <x-forms.error name="image" />
+                        </div>
                         <div>
                             <fieldset class="space-y-3">
                                 <legend class="label">Steps</legend>

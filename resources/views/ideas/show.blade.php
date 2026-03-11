@@ -24,6 +24,12 @@
         </div>
 
         <div class="mt-8 space-y-6">
+            @if ($idea->image_path)
+                <div class="rounded-lg overflow-hidden">
+                    <img src="{{ asset('storage/' . $idea->image_path) }}" alt="{{ $idea->title }}" class="w-full h-auto object-cover"/>
+                </div>
+            @endif
+
             <h1 class="font-bold text-4xl">{{ $idea->title }}</h1>
 
             <x-ideas.status :status="$idea->status->value">
@@ -43,10 +49,22 @@
                     <div class="mt-3 space-y-2">
                         @foreach ($idea->steps as $step)
                             <x-cards>    
-                                <div class="flex items-center gap-x-3">
-                                    <button>&check;</button>
-                                    <span>{{ $step->description }}</span>
-                                </div>
+                                <form method="post" action="{{ route('step.update', $step) }}">
+                                    @csrf
+                                    @method('PATCH')
+
+                                    <div class="flex items-center gap-x-3">
+                                        <button 
+                                            type="submit"
+                                            role="checkbox"
+                                            class="size-5 flex items-center justify-center rounded-lg text-primary-foreground {{ $step->completed ? 'bg-primary' : 'border border-primary' }}"
+                                        >
+                                            &check;
+                                        </button>
+
+                                        <span class="{{ $step->completed ? 'line-through text-muted-foreground' : '' }}">{{ $step->description }}</span>
+                                    </div>
+                                </form>
                             </x-cards>
                         @endforeach
                     </div>
