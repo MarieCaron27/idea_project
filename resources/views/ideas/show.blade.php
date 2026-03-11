@@ -36,6 +36,27 @@
                 <div class="text-foreground max-w-none">{{ $idea->description }}</div>
             </x-cards>
 
+            @if ($idea->steps->count())
+                <div>
+                    <h3 class="font-bold text-xl mt-6">Steps</h3>
+
+                    <div class="mt-3 space-y-2">
+                        @foreach ($idea->steps as $step)
+                            <x-cards>    
+                                <div class="flex items-center gap-x-3">
+                                    <button>&check;</button>
+                                    <span>{{ $step->description }}</span>
+                                </div>
+                            </x-cards>
+                        @endforeach
+                    </div>
+                </div>
+            @else
+                <x-cards>
+                    <p>No steps at this time.</p>
+                </x-cards>
+            @endif
+
             @if ($idea->links->count())
                 <div>
                     <h3 class="font-bold text-xl mt-6">Links</h3>

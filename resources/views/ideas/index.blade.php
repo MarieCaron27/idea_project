@@ -56,7 +56,7 @@
 
         <div>
             <x-modal name="create-idea-modal" title="New Idea">
-                <form x-data="{ status: 'pending', newLink: '', links: [] }"
+                <form x-data="{ status: 'pending', newLink: '', links: [], newStep: '', steps: [] }"
                     method="post"
                     action="{{ route('idea.store') }}"
                     @submit="links = links.map(l => l.trim()).filter(l => l.length > 0)"
@@ -101,17 +101,66 @@
 
                         <div>
                             <fieldset class="space-y-3">
+                                <legend class="label">Steps</legend>
+
+                                <!-- We use JS not PHP here -->
+                                <template x-for="(step, index) in steps" :key="step">
+                                    <div class="flex gap-x-2 items-center">
+                                        <input 
+                                            type="text"
+                                            name="steps[]" 
+                                            x-model="step" 
+                                            class="input"
+                                            readonly
+                                        >
+
+                                        <button type="button" @click="steps.splice(index, 1)" class="form-muted-icon" aria-label="Remove step">
+                                            <x-icons.close />
+                                        </button>                                    
+                                    </div>
+                                </template>
+
+                                <div class="flex gap-x-2 items-center">
+                                    <input 
+                                        x-model="newStep"
+                                        type="text"
+                                        id="new-step"
+                                        placeholder="What needs to be done ?"
+                                        class="input flex-1"
+                                        spellcheck="false"
+                                    >
+
+                                    <button 
+                                        type="button" 
+                                        @click="
+                                            if (newStep.trim()) {
+                                                steps.push(newStep.trim());
+                                                newStep = '';
+                                            }
+                                        "
+                                        :disabled="newStep.trim().length === 0"
+                                        aria-label="Add step button"
+                                        class="form-muted-icon"
+                                    >
+                                        <x-icons.close class="rotate-45"/>
+                                    </button>
+                                </div>
+                            </fieldset>
+                        </div>
+
+                        <div>
+                            <fieldset class="space-y-3">
                                 <legend class="label">Links</legend>
 
                                 <!-- We use JS not PHP here -->
-                                <template x-for="(link, index) in links" :key="index">
+                                <template x-for="(link, index) in links" :key="link">
                                     <div class="flex gap-x-2 items-center">
                                         <input 
                                             type="url"
                                             name="links[]" 
-                                            x-model="links[index]" 
-                                            :value="link"
+                                            x-model="link" 
                                             class="input"
+                                            readonly
                                         >
 
                                         <button type="button" @click="links.splice(index, 1)" class="form-muted-icon" aria-label="Remove link">

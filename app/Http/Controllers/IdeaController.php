@@ -42,10 +42,20 @@ class IdeaController extends Controller
 
     /**
      * Store a newly created resource in storage.
+     * 
+     * Ce code permet, pour chaque utilisateur connecté, de récupérer l’idée initialisée dans le formulaire 
+     * ainsi que les steps correspondantes de manière sécurisée. Ensuite, chaque step est transformée en 
+     * collection afin d’ajouter l’idée et ses différentes steps dans la base de données. Enfin, 
+     * l’utilisateur est redirigé avec un message de succès lorsque tout s’est bien passé.
+     * 
      */
     public function store(StoreIdeaRequest $request)
     {
-        Auth::user()->ideas()->create($request->validated());
+        $idea = Auth::user()->ideas()->create($request->safe()->except('steps'));
+
+        $idea->steps()->createMany(
+            collect($request->steps)->map(fn($step) => ['description' => $step])
+        );
 
         return to_route('idea.index')
             ->with('success', 'Idea created successfully!');
